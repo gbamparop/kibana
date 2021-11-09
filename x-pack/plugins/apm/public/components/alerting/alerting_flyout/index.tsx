@@ -42,7 +42,6 @@ export function AlertingFlyout(props: Props) {
     'transactionType' in query ? query.transactionType : undefined;
 
   const { services } = useKibana<ApmPluginStartDeps>();
-
   const initialValues = getInitialAlertValues(alertType, serviceName);
 
   const onCloseAddFlyout = useCallback(
