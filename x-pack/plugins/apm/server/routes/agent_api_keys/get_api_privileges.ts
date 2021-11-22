@@ -18,26 +18,31 @@ interface SecurityHasPrivilegesResponse {
 
 export async function getApiPrivileges({
   context,
-  securityPluginStart
+  securityPluginStart,
 }: {
-  context: ApmPluginRequestHandlerContext,
-  securityPluginStart: NonNullable<APMPluginStartDependencies['security']>
+  context: ApmPluginRequestHandlerContext;
+  securityPluginStart: NonNullable<APMPluginStartDependencies['security']>;
 }) {
-
   const [securityHasPrivilegesResponse, areApiKeysEnabled] = await Promise.all([
-    context.core.elasticsearch.client.asCurrentUser.security.hasPrivileges<SecurityHasPrivilegesResponse>({
-      body: { cluster: ['manage_security', 'manage_api_key', 'manage_own_api_key'] },
-    }),
+    context.core.elasticsearch.client.asCurrentUser.security.hasPrivileges<SecurityHasPrivilegesResponse>(
+      {
+        body: {
+          cluster: ['manage_security', 'manage_api_key', 'manage_own_api_key'],
+        },
+      }
+    ),
     securityPluginStart.authc.apiKeys.areAPIKeysEnabled(),
   ]);
 
-  const { body: {
-    cluster: {
-      manage_security: manageSecurity,
-      manage_api_key: manageApiKey,
-      manage_own_api_key: manageOwnApiKey,
+  const {
+    body: {
+      cluster: {
+        manage_security: manageSecurity,
+        manage_api_key: manageApiKey,
+        manage_own_api_key: manageOwnApiKey,
+      },
     },
-  } } = securityHasPrivilegesResponse;
+  } = securityHasPrivilegesResponse;
 
   const isAdmin = manageSecurity || manageApiKey;
   const canManage = manageSecurity || manageApiKey || manageOwnApiKey;

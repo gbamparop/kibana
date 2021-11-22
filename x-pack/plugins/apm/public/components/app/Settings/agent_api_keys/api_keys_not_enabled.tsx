@@ -7,19 +7,24 @@
 import { EuiEmptyPrompt, EuiLink } from '@elastic/eui';
 import React from 'react';
 import { FormattedMessage } from '@kbn/i18n/react';
-import { useKibana } from '../../../../../../../../src/plugins/kibana_react/public';
 import { i18n } from '@kbn/i18n';
+import { useKibana } from '../../../../../../../../src/plugins/kibana_react/public';
 
 export function ApiKeysNotEnabled() {
-  const { services: { docLinks } } = useKibana();
+  const {
+    services: { docLinks },
+  } = useKibana();
 
   return (
     <EuiEmptyPrompt
       title={
         <h2>
-          {i18n.translate('xpack.apm.settings.agentKeys.apiKeysDisabledErrorTitle', {
-            defaultMessage: 'API keys not enabled in Elasticsearch',
-          })}
+          {i18n.translate(
+            'xpack.apm.settings.agentKeys.apiKeysDisabledErrorTitle',
+            {
+              defaultMessage: 'API keys not enabled in Elasticsearch',
+            }
+          )}
         </h2>
       }
       color="danger"
@@ -31,10 +36,16 @@ export function ApiKeysNotEnabled() {
             defaultMessage="Contact your system administrator and refer to the {link} to enable API keys."
             values={{
               link: (
-                <EuiLink href={docLinks?.links.security.apiKeyServiceSettings} target="_blank">
-                  {i18n.translate('xpack.apm.settings.agentKeys.apiKeysDisabledErrorLinkText', {
-                    defaultMessage: 'docs',
-                  })}
+                <EuiLink
+                  href={docLinks?.links.security.apiKeyServiceSettings}
+                  target="_blank"
+                >
+                  {i18n.translate(
+                    'xpack.apm.settings.agentKeys.apiKeysDisabledErrorLinkText',
+                    {
+                      defaultMessage: 'docs',
+                    }
+                  )}
                 </EuiLink>
               ),
             }}
@@ -43,4 +54,4 @@ export function ApiKeysNotEnabled() {
       }
     />
   );
-};
+}

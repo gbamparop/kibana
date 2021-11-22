@@ -17,7 +17,7 @@ import {
   EuiFlexGroup,
   EuiFlexItem,
   EuiEmptyPrompt,
-  EuiButton
+  EuiButton,
 } from '@elastic/eui';
 import { useFetcher, FETCH_STATUS } from '../../../../hooks/use_fetcher';
 import { ApiKey } from '../../../../../../security/common/model';
@@ -32,16 +32,23 @@ export function AgentApiKeys() {
     });
   }, []);
 
-  const { data: privilegeData = {}, status: privilegeStatus } = useFetcher((callApmApi) => {
-    return callApmApi({
-      endpoint: 'GET /apm/api_key/privileges',
-    });
-  }, [], { showToastOnError: false });
+  const { data: privilegeData = {}, status: privilegeStatus } = useFetcher(
+    (callApmApi) => {
+      return callApmApi({
+        endpoint: 'GET /apm/api_key/privileges',
+      });
+    },
+    [],
+    { showToastOnError: false }
+  );
 
   const { areApiKeysEnabled, isAdmin, canManage } = privilegeData;
 
-  if (privilegeStatus === FETCH_STATUS.SUCCESS && areApiKeysEnabled && canManage) {
-
+  if (
+    privilegeStatus === FETCH_STATUS.SUCCESS &&
+    areApiKeysEnabled &&
+    canManage
+  ) {
   } else if (privilegeStatus === FETCH_STATUS.FAILURE) {
     return (
       <EuiEmptyPrompt
@@ -49,12 +56,16 @@ export function AgentApiKeys() {
         color="subdued"
         title={
           <h2>
-            {i18n.translate('xpack.apm.settings.agentKeys.fetchingPrivilegesErrorMessage', {
-              defaultMessage: 'Error checking privileges'
-            })}
-          </h2>}
+            {i18n.translate(
+              'xpack.apm.settings.agentKeys.fetchingPrivilegesErrorMessage',
+              {
+                defaultMessage: 'Error checking privileges',
+              }
+            )}
+          </h2>
+        }
       />
-    )
+    );
   }
 
   const apiKeys = data?.apiKeys || [];
@@ -72,15 +83,13 @@ export function AgentApiKeys() {
       body={
         <p>
           {i18n.translate('xpack.apm.settings.agentKeys.emptyPromptBody', {
-            defaultMessage: 'Create agent keys to authorize requests to the APM Server.',
+            defaultMessage:
+              'Create agent keys to authorize requests to the APM Server.',
           })}
         </p>
       }
       actions={
-        <EuiButton
-          fill={true}
-          iconType='plusInCircleFilled'
-        >
+        <EuiButton fill={true} iconType="plusInCircleFilled">
           {i18n.translate('xpack.apm.settings.agentKeys.createAgentKeyButton', {
             defaultMessage: 'Create agent key',
           })}
@@ -96,9 +105,10 @@ export function AgentApiKeys() {
       title={
         <h2>
           {i18n.translate('xpack.apm.settings.agentKeys.table.errorMessage', {
-            defaultMessage: 'Could not load API keys.'
+            defaultMessage: 'Could not load API keys.',
           })}
-        </h2>}
+        </h2>
+      }
     />
   );
 
@@ -130,12 +140,15 @@ export function AgentApiKeys() {
       <EuiSpacer size="m" />
       {!areApiKeysEnabled && <ApiKeysNotEnabled />}
       {status === FETCH_STATUS.FAILURE && failurePrompt}
-      {status === FETCH_STATUS.SUCCESS && areApiKeysEnabled && canManage && apiKeys.length === 0 && emptyStatePrompt}
-      {status === FETCH_STATUS.SUCCESS && areApiKeysEnabled && canManage && apiKeys.length === 0 && (
-        <ApiKeysTable
-          apiKeys={apiKeys}
-        />
-      )}
+      {status === FETCH_STATUS.SUCCESS &&
+        areApiKeysEnabled &&
+        canManage &&
+        apiKeys.length === 0 &&
+        emptyStatePrompt}
+      {status === FETCH_STATUS.SUCCESS &&
+        areApiKeysEnabled &&
+        canManage &&
+        apiKeys.length === 0 && <ApiKeysTable apiKeys={apiKeys} />}
     </Fragment>
   );
 }
@@ -145,37 +158,49 @@ function ApiKeysTable({
   loading,
   error,
 }: {
-  apiKeys: ApiKey[],
-  loading: boolean,
-  error: boolean,
+  apiKeys: ApiKey[];
+  loading: boolean;
+  error: boolean;
 }) {
   const columns: Array<EuiBasicTableColumn<ApiKey>> = [
     {
       field: 'name',
-      name: i18n.translate('xpack.apm.settings.agentKeys.table.nameColumnName', {
-        defaultMessage: 'Name',
-      }),
+      name: i18n.translate(
+        'xpack.apm.settings.agentKeys.table.nameColumnName',
+        {
+          defaultMessage: 'Name',
+        }
+      ),
       sortable: true,
     },
     {
       field: 'username',
-      name: i18n.translate('xpack.apm.settings.agentKeys.table.userNameColumnName', {
-        defaultMessage: 'User',
-      }),
+      name: i18n.translate(
+        'xpack.apm.settings.agentKeys.table.userNameColumnName',
+        {
+          defaultMessage: 'User',
+        }
+      ),
       sortable: true,
     },
     {
       field: 'realm',
-      name: i18n.translate('xpack.apm.settings.agentKeys.table.realmColumnName', {
-        defaultMessage: 'Realm',
-      }),
+      name: i18n.translate(
+        'xpack.apm.settings.agentKeys.table.realmColumnName',
+        {
+          defaultMessage: 'Realm',
+        }
+      ),
       sortable: true,
     },
     {
       field: 'creation',
-      name: i18n.translate('xpack.apm.settings.agentKeys.table.creationColumnName', {
-        defaultMessage: 'Created',
-      }),
+      name: i18n.translate(
+        'xpack.apm.settings.agentKeys.table.creationColumnName',
+        {
+          defaultMessage: 'Created',
+        }
+      ),
       dataType: 'date',
       sortable: true,
       mobileOptions: {
@@ -193,9 +218,12 @@ function ApiKeysTable({
       {
         type: 'field_value_selection',
         field: 'username',
-        name: i18n.translate('xpack.apm.settings.agentKeys.table.userFilterLabel', {
-          defaultMessage: 'User',
-        }),
+        name: i18n.translate(
+          'xpack.apm.settings.agentKeys.table.userFilterLabel',
+          {
+            defaultMessage: 'User',
+          }
+        ),
         multiSelect: 'or',
         operator: 'exact',
         options: Object.keys(
@@ -203,14 +231,17 @@ function ApiKeysTable({
             acc[username] = true;
             return acc;
           }, {})
-        ).map(value => ({ value }))
+        ).map((value) => ({ value })),
       },
       {
         type: 'field_value_selection',
         field: 'realm',
-        name: i18n.translate('xpack.apm.settings.agentKeys.table.realmFilterLabel', {
-          defaultMessage: 'Realm',
-        }),
+        name: i18n.translate(
+          'xpack.apm.settings.agentKeys.table.realmFilterLabel',
+          {
+            defaultMessage: 'Realm',
+          }
+        ),
         multiSelect: 'or',
         operator: 'exact',
         options: Object.keys(
@@ -218,25 +249,30 @@ function ApiKeysTable({
             acc[realm] = true;
             return acc;
           }, {})
-        ).map(value => ({ value }))
+        ).map((value) => ({ value })),
       },
     ],
   };
 
   return (
     <EuiInMemoryTable
-      tableCaption={i18n.translate('xpack.apm.settings.agentKeys.tableCaption', {
-        defaultMessage: 'Agent API keys',
-      })}
+      tableCaption={i18n.translate(
+        'xpack.apm.settings.agentKeys.tableCaption',
+        {
+          defaultMessage: 'Agent API keys',
+        }
+      )}
       items={apiKeys}
       columns={columns}
       pagination={true}
       search={search}
       sorting={true}
       error={
-        error ? i18n.translate('xpack.apm.settings.agentKeys.table.errorMessage', {
-          defaultMessage: 'Could not load API keys.'
-        }) : ''
+        error
+          ? i18n.translate('xpack.apm.settings.agentKeys.table.errorMessage', {
+              defaultMessage: 'Could not load API keys.',
+            })
+          : ''
       }
       loading={loading}
     />

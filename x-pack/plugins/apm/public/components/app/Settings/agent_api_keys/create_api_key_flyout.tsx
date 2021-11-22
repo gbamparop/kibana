@@ -1,3 +1,10 @@
+/*
+ * Copyright Elasticsearch B.V. and/or licensed to Elasticsearch B.V. under one
+ * or more contributor license agreements. Licensed under the Elastic License
+ * 2.0; you may not use this file except in compliance with the Elastic License
+ * 2.0.
+ */
+
 import React, { Fragment, useState, useRef } from 'react';
 import { i18n } from '@kbn/i18n';
 import {
@@ -16,7 +23,7 @@ import {
   useGeneratedHtmlId,
   EuiFieldText,
   EuiCheckboxGroup,
-  EuiText
+  EuiText,
 } from '@elastic/eui';
 import { callApmApi } from '../../../../services/rest/createCallApmApi';
 
@@ -41,11 +48,11 @@ export function CreateApiKeyFlyout() {
   const createAPIkey = async ({
     sourcemap,
     event,
-    agentConfig
+    agentConfig,
   }: {
-    sourcemap: boolean,
-    event: boolean,
-    agentConfig: boolean
+    sourcemap: boolean;
+    event: boolean;
+    agentConfig: boolean;
   }) => {
     const name = indexInputRef.current.value;
     await callApmApi({
@@ -56,7 +63,7 @@ export function CreateApiKeyFlyout() {
           name,
           sourcemap,
           event,
-          agentConfig
+          agentConfig,
         },
       },
     });
@@ -96,10 +103,7 @@ export function CreateApiKeyFlyout() {
 
   if (isFlyoutVisible) {
     flyout = (
-      <EuiFlyout
-        onClose={closeFlyout}
-        size="s"
-      >
+      <EuiFlyout onClose={closeFlyout} size="s">
         <EuiFlyoutHeader hasBorder aria-labelledby={flyoutHeadingId}>
           <EuiTitle>
             <h2 id={flyoutHeadingId}>Create API key</h2>
@@ -122,8 +126,7 @@ export function CreateApiKeyFlyout() {
               idToSelectedMap={checkboxIdToSelectedMap}
               onChange={(id) => onChange(id)}
               legend={{
-                children:
-                  'Assign privileges to the API key',
+                children: 'Assign privileges to the API key',
               }}
             />
 
@@ -144,8 +147,8 @@ export function CreateApiKeyFlyout() {
                   createAPIkey({
                     sourcemap: true,
                     event: true,
-                    agentConfig: true
-                  })
+                    agentConfig: true,
+                  });
                 }}
                 fill={true}
               >
@@ -155,16 +158,12 @@ export function CreateApiKeyFlyout() {
           </EuiFlexGroup>
         </EuiFlyoutFooter>
       </EuiFlyout>
-    )
+    );
   }
 
   return (
     <Fragment>
-      <EuiButton
-        onClick={showFlyout}
-        fill={true}
-        iconType='plusInCircleFilled'
-      >
+      <EuiButton onClick={showFlyout} fill={true} iconType="plusInCircleFilled">
         {i18n.translate('xpack.apm.settings.agentKeys.createApiKeyButton', {
           defaultMessage: 'Create API key',
         })}

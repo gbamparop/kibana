@@ -5,14 +5,14 @@
  * 2.0.
  */
 
-import { createApmServerRoute } from '../apm_routes/create_apm_server_route';
-import { createApmServerRouteRepository } from '../apm_routes/create_apm_server_route_repository';
-import { getAgentApiKeys } from './get_agent_api_keys';
-import { getApiPrivileges } from './get_api_privileges';
 import Boom from '@hapi/boom';
 import { i18n } from '@kbn/i18n';
 import * as t from 'io-ts';
 import { toBooleanRt } from '@kbn/io-ts-utils/to_boolean_rt';
+import { createApmServerRoute } from '../apm_routes/create_apm_server_route';
+import { createApmServerRouteRepository } from '../apm_routes/create_apm_server_route_repository';
+import { getAgentApiKeys } from './get_agent_api_keys';
+import { getApiPrivileges } from './get_api_privileges';
 
 const agentApiKeyRoute = createApmServerRoute({
   endpoint: 'GET /apm/api_key',
@@ -36,9 +36,11 @@ const agentApiKeyPrivilegesRoute = createApmServerRoute({
   options: { tags: ['access:apm'] },
 
   handler: async (resources) => {
-    const { plugins: { security }, context } = resources;
+    const {
+      plugins: { security },
+      context,
+    } = resources;
     throw Boom.internal(SECURITY_REQUIRED_MESSAGE);
-
 
     if (!security) {
       throw Boom.internal(SECURITY_REQUIRED_MESSAGE);
@@ -47,7 +49,7 @@ const agentApiKeyPrivilegesRoute = createApmServerRoute({
     const securityPluginStart = await security.start();
     const apiPrivileges = await getApiPrivileges({
       context,
-      securityPluginStart
+      securityPluginStart,
     });
 
     return apiPrivileges;
@@ -70,7 +72,11 @@ const createAgentApiKeyRoute = createApmServerRoute({
     ]),
   }),
   handler: async (resources) => {
-    const { plugins: { security }, request, params } = resources;
+    const {
+      plugins: { security },
+      request,
+      params,
+    } = resources;
 
     if (!security) {
       throw Boom.internal(SECURITY_REQUIRED_MESSAGE);
@@ -79,23 +85,30 @@ const createAgentApiKeyRoute = createApmServerRoute({
     const body = {
       name: params.body.name,
       metadata: {
-        application: 'apm'
+        application: 'apm',
       },
       role_descriptors: {
         apm: {
           applications: [
             {
               application: 'apm',
-              privileges: ['sourcemap:write', 'event:write', 'config_agent:read'],
-              resources: ['*']
-            }
-          ]
-        }
-      }
+              privileges: [
+                'sourcemap:write',
+                'event:write',
+                'config_agent:read',
+              ],
+              resources: ['*'],
+            },
+          ],
+        },
+      },
     };
 
     const securityPluginStart = await security.start();
-    const apiKey = await securityPluginStart.authc.apiKeys.create(request, body);
+    const apiKey = await securityPluginStart.authc.apiKeys.create(
+      request,
+      body
+    );
 
     // if (!apiKey) {
     //   return response.badRequest({ body: { message: `API Keys are not available` } });
@@ -109,10 +122,14 @@ const invalidateAgentApiKeyRoute = createApmServerRoute({
   endpoint: 'POST /apm/api_key/invalidate',
   options: { tags: ['access:apm'] },
   params: t.type({
-    body: t.type({ id: t.string, })
+    body: t.type({ id: t.string }),
   }),
   handler: async (resources) => {
-    const { plugins: { security }, request, params } = resources;
+    const {
+      plugins: { security },
+      request,
+      params,
+    } = resources;
 
     if (!security) {
       throw Boom.internal(SECURITY_REQUIRED_MESSAGE);
@@ -121,23 +138,30 @@ const invalidateAgentApiKeyRoute = createApmServerRoute({
     const body = {
       name: params.body.name,
       metadata: {
-        application: 'apm'
+        application: 'apm',
       },
       role_descriptors: {
         apm: {
           applications: [
             {
               application: 'apm',
-              privileges: ['sourcemap:write', 'event:write', 'config_agent:read'],
-              resources: ['*']
-            }
-          ]
-        }
-      }
+              privileges: [
+                'sourcemap:write',
+                'event:write',
+                'config_agent:read',
+              ],
+              resources: ['*'],
+            },
+          ],
+        },
+      },
     };
 
     const securityPluginStart = await security.start();
-    const apiKey = await securityPluginStart.authc.apiKeys.create(request, body);
+    const apiKey = await securityPluginStart.authc.apiKeys.create(
+      request,
+      body
+    );
 
     // if (!apiKey) {
     //   return response.badRequest({ body: { message: `API Keys are not available` } });
@@ -147,11 +171,10 @@ const invalidateAgentApiKeyRoute = createApmServerRoute({
   },
 });
 
-export const agentApiKeyRouteRepository =
-  createApmServerRouteRepository()
-    .add(agentApiKeyRoute)
-    .add(agentApiKeyPrivilegesRoute)
-    .add(createAgentApiKeyRoute);
+export const agentApiKeyRouteRepository = createApmServerRouteRepository()
+  .add(agentApiKeyRoute)
+  .add(agentApiKeyPrivilegesRoute)
+  .add(createAgentApiKeyRoute);
 
 const SECURITY_REQUIRED_MESSAGE = i18n.translate(
   'xpack.apm.api.apiKeys.securityRequired',
