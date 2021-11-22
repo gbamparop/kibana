@@ -80,7 +80,6 @@ export class APIKeysGridPage extends Component<Props, State> {
       error: undefined,
     };
   }
-
   public componentDidMount() {
     this.checkPrivileges();
   }

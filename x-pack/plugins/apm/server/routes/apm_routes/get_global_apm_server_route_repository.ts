@@ -37,6 +37,7 @@ import { APMRouteHandlerResources } from '../typings';
 import { historicalDataRouteRepository } from '../historical_data';
 import { eventMetadataRouteRepository } from '../event_metadata';
 import { suggestionsRouteRepository } from '../suggestions';
+import { agentApiKeyRouteRepository } from '../agent_api_keys/route';
 
 const getTypedGlobalApmServerRouteRepository = () => {
   const repository = createApmServerRouteRepository()
@@ -64,7 +65,8 @@ const getTypedGlobalApmServerRouteRepository = () => {
     .merge(correlationsRouteRepository)
     .merge(fallbackToTransactionsRouteRepository)
     .merge(historicalDataRouteRepository)
-    .merge(eventMetadataRouteRepository);
+    .merge(eventMetadataRouteRepository)
+    .merge(agentApiKeyRouteRepository);
 
   return repository;
 };
