@@ -23,7 +23,8 @@
     "advancedSettings",
     "unifiedFieldList",
     "lens",
-    "maps"
+    "maps",
+    "controls"
   ],
   "optionalPlugins": [
     "actions",
