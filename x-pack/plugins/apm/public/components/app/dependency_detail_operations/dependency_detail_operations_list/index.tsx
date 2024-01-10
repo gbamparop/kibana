@@ -8,6 +8,7 @@
 import { i18n } from '@kbn/i18n';
 import { keyBy } from 'lodash';
 import React from 'react';
+import { EmptyMessage } from '@kbn/apm-error-stacktrace';
 import { useApmPluginContext } from '../../../../context/apm_plugin/use_apm_plugin_context';
 import { useSearchServiceDestinationMetrics } from '../../../../context/time_range_metadata/use_search_service_destination_metrics';
 import { useApmParams } from '../../../../hooks/use_apm_params';
@@ -18,7 +19,6 @@ import {
   getSpanMetricColumns,
   SpanMetricGroup,
 } from '../../../shared/dependencies_table/get_span_metric_columns';
-import { EmptyMessage } from '../../../shared/empty_message';
 import { ITableColumn, ManagedTable } from '../../../shared/managed_table';
 import { getComparisonEnabled } from '../../../shared/time_comparison/get_comparison_enabled';
 import { TruncateWithTooltip } from '../../../shared/truncate_with_tooltip';

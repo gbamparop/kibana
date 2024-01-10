@@ -10,6 +10,7 @@ import { TypeOf } from '@kbn/typed-react-router-config';
 import { i18n } from '@kbn/i18n';
 import React, { useMemo } from 'react';
 import { euiStyled } from '@kbn/kibana-react-plugin/common';
+import { EmptyMessage } from '@kbn/apm-error-stacktrace';
 import { ApmRoutes } from '../../routing/apm_route_config';
 import {
   asMillisecondDuration,
@@ -19,7 +20,6 @@ import { useApmParams } from '../../../hooks/use_apm_params';
 import { FetcherResult, FETCH_STATUS } from '../../../hooks/use_fetcher';
 import { APIReturnType } from '../../../services/rest/create_call_apm_api';
 import { truncate } from '../../../utils/style';
-import { EmptyMessage } from '../../shared/empty_message';
 import { ImpactBar } from '../../shared/impact_bar';
 import { TransactionDetailLink } from '../../shared/links/apm/transaction_detail_link';
 import { ITableColumn, ManagedTable } from '../../shared/managed_table';

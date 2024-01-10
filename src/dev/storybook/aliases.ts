@@ -61,4 +61,5 @@ export const storybookAliases = {
   ui_actions_enhanced: 'src/plugins/ui_actions_enhanced/.storybook',
   unified_search: 'src/plugins/unified_search/.storybook',
   profiling: 'x-pack/plugins/profiling/.storybook',
+  apm_error_stacktrace: 'packages/kbn-apm-error-stacktrace/.storybook',
 };

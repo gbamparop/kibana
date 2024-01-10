@@ -12,16 +12,20 @@ import type { CoreStart } from '@kbn/core/public';
 import type { CustomizationCallback } from '@kbn/discover-plugin/public';
 import { i18n } from '@kbn/i18n';
 import { waitFor } from 'xstate/lib/waitFor';
+import { useDarkMode } from '@kbn/kibana-react-plugin/public';
+import { EuiThemeProvider } from '@kbn/kibana-react-plugin/common';
 import type { LogExplorerController } from '../controller';
 import { LogExplorerControllerProvider } from '../controller/provider';
 import type { LogExplorerStartDeps } from '../types';
 import { dynamic } from '../utils/dynamic';
 import { useKibanaContextForPluginProvider } from '../utils/use_kibana';
 import { createCustomSearchBar } from './custom_search_bar';
+// import { KibanaThemeProvider } from '@kbn/react-kibana-context-theme';
 
 const LazyCustomDatasetFilters = dynamic(() => import('./custom_dataset_filters'));
 const LazyCustomDatasetSelector = dynamic(() => import('./custom_dataset_selector'));
 const LazyCustomFlyoutContent = dynamic(() => import('./custom_flyout_content'));
+const LazyCustomFlyoutException = dynamic(() => import('./custom_flyout_exception'));
 
 export interface CreateLogExplorerProfileCustomizationsDeps {
   core: CoreStart;
@@ -125,6 +129,38 @@ export const createLogExplorerProfileCustomizations =
               <KibanaContextProviderForPlugin>
                 <LogExplorerControllerProvider controller={controller}>
                   <LazyCustomFlyoutContent {...props} />
+                </LogExplorerControllerProvider>
+              </KibanaContextProviderForPlugin>
+            );
+          },
+        });
+
+        registry.add({
+          id: 'doc_view_exception',
+          title: i18n.translate('xpack.logExplorer.flyoutDetail.docViews.exception', {
+            defaultMessage: 'Stack trace',
+          }),
+          order: -1,
+          component: (props) => {
+            const KibanaContextProviderForPlugin = useKibanaContextForPluginProvider(core, plugins);
+            const darkMode = useDarkMode(false);
+
+            //   <KibanaThemeProvider
+            //     theme={core?.theme}
+            //     modify={{
+            //       breakpoint: {
+            //         xxl: 1600,
+            //         xxxl: 2000,
+            //       },
+            //     }}
+            //   >
+
+            return (
+              <KibanaContextProviderForPlugin>
+                <LogExplorerControllerProvider controller={controller}>
+                  <EuiThemeProvider darkMode={darkMode}>
+                    <LazyCustomFlyoutException {...props} />
+                  </EuiThemeProvider>
                 </LogExplorerControllerProvider>
               </KibanaContextProviderForPlugin>
             );

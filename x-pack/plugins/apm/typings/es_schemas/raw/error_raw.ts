@@ -5,6 +5,7 @@
  * 2.0.
  */
 
+import { Stackframe } from '@kbn/apm-error-stacktrace';
 import { APMBaseDoc } from './apm_base_doc';
 import { Container } from './fields/container';
 import { Host } from './fields/host';
@@ -13,7 +14,6 @@ import { Kubernetes } from './fields/kubernetes';
 import { Page } from './fields/page';
 import { Process } from './fields/process';
 import { Service } from './fields/service';
-import { Stackframe } from './fields/stackframe';
 import { TimestampUs } from './fields/timestamp_us';
 import { Url } from './fields/url';
 import { User } from './fields/user';
