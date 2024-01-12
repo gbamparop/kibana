@@ -200,3 +200,17 @@ export const closeCellActionPopoverText = i18n.translate(
     defaultMessage: 'Close popover',
   }
 );
+
+export const flyoutStacktraceErrorMessageTitle = i18n.translate(
+  'xpack.logExplorer.flyoutStacktrace.errorMessageTitle',
+  {
+    defaultMessage: 'An Error Occurred',
+  }
+);
+
+export const flyoutStacktraceErrorMessage = i18n.translate(
+  'xpack.logExplorer.flyoutStacktrace.errorMessage',
+  {
+    defaultMessage: 'Could not fetch data at this time',
+  }
+);

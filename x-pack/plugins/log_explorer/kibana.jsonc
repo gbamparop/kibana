@@ -23,7 +23,8 @@
       "kibanaUtils",
       "navigation",
       "share",
-      "unifiedSearch"
+      "unifiedSearch",
+      "unifiedDocViewer"
     ],
     "optionalPlugins": [],
     "requiredBundles": [],

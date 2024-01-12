@@ -12,6 +12,8 @@ import type { CoreStart } from '@kbn/core/public';
 import type { CustomizationCallback } from '@kbn/discover-plugin/public';
 import { i18n } from '@kbn/i18n';
 import { waitFor } from 'xstate/lib/waitFor';
+import { useDarkMode } from '@kbn/kibana-react-plugin/public';
+import { EuiThemeProvider } from '@kbn/kibana-react-plugin/common';
 import type { LogExplorerController } from '../controller';
 import { LogExplorerControllerProvider } from '../controller/provider';
 import type { LogExplorerStartDeps } from '../types';
@@ -23,6 +25,7 @@ import { createCustomCellRenderer } from './custom_cell_renderer';
 const LazyCustomDatasetFilters = dynamic(() => import('./custom_dataset_filters'));
 const LazyCustomDatasetSelector = dynamic(() => import('./custom_dataset_selector'));
 const LazyCustomFlyoutContent = dynamic(() => import('./custom_flyout_content'));
+const LazyCustomLogStacktrace = dynamic(() => import('./custom_log_stacktrace'));
 
 export interface CreateLogExplorerProfileCustomizationsDeps {
   core: CoreStart;
@@ -131,6 +134,28 @@ export const createLogExplorerProfileCustomizations =
               <KibanaContextProviderForPlugin>
                 <LogExplorerControllerProvider controller={controller}>
                   <LazyCustomFlyoutContent {...props} />
+                </LogExplorerControllerProvider>
+              </KibanaContextProviderForPlugin>
+            );
+          },
+        });
+
+        registry.add({
+          id: 'doc_view_stacktrace',
+          title: i18n.translate('xpack.logExplorer.flyoutDetail.docViews.stacktrace', {
+            defaultMessage: 'Stack trace',
+          }),
+          order: 30,
+          component: (props) => {
+            const KibanaContextProviderForPlugin = useKibanaContextForPluginProvider(core, plugins);
+            const darkMode = useDarkMode(false);
+
+            return (
+              <KibanaContextProviderForPlugin>
+                <LogExplorerControllerProvider controller={controller}>
+                  <EuiThemeProvider darkMode={darkMode}>
+                    <LazyCustomLogStacktrace {...props} />
+                  </EuiThemeProvider>
                 </LogExplorerControllerProvider>
               </KibanaContextProviderForPlugin>
             );
