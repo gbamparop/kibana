@@ -15,12 +15,16 @@ import {
   DatasetQualityPluginStart,
   DatasetQualityPluginStartDependencies,
 } from './types';
+import { datasetQualityTelemetry } from './saved_objects/dataset_quality_telemetry';
+import { createDatasetQualityTelemetry } from './lib/dataset_quality_telemetry';
 
 export class DatasetQualityServerPlugin implements Plugin {
+  private readonly initializerContext: PluginInitializerContext;
   private readonly logger: Logger;
 
   constructor(initializerContext: PluginInitializerContext) {
     this.logger = initializerContext.logger.get();
+    this.initializerContext = initializerContext;
   }
 
   setup(
@@ -39,6 +43,25 @@ export class DatasetQualityServerPlugin implements Plugin {
           }),
       };
     }) as DatasetQualityRouteHandlerResources['plugins'];
+
+    core.savedObjects.registerType(datasetQualityTelemetry);
+
+    if (
+      plugins.taskManager &&
+      plugins.usageCollection
+      // currentConfig.telemetryCollectionEnabled
+    ) {
+      createDatasetQualityTelemetry({
+        core,
+        // getApmIndices: `logs-*-*`,
+        // getApmIndices: plugins.apmDataAccess.getApmIndices,
+        usageCollector: plugins.usageCollection,
+        taskManager: plugins.taskManager,
+        logger: this.logger,
+        kibanaVersion: this.initializerContext.env.packageInfo.version,
+        isProd: this.initializerContext.env.mode.prod,
+      });
+    }
 
     const getEsCapabilities = async () => {
       return await core.getStartServices().then((services) => {

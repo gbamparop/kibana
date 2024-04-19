@@ -24,7 +24,10 @@
       "dataViews",
       "lens"
     ],
-    "optionalPlugins": [],
+    "optionalPlugins": [
+      "taskManager",
+      "usageCollection",
+    ],
     "requiredBundles": [],
     "extraPublicDirs": [
       "common"

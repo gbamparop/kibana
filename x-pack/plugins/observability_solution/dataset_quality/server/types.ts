@@ -7,9 +7,13 @@
 
 import { CustomRequestHandlerContext } from '@kbn/core/server';
 import { FleetSetupContract, FleetStartContract } from '@kbn/fleet-plugin/server';
+import { TaskManagerSetupContract } from '@kbn/task-manager-plugin/server';
+import { UsageCollectionSetup } from '@kbn/usage-collection-plugin/server';
 
 export interface DatasetQualityPluginSetupDependencies {
   fleet: FleetSetupContract;
+  taskManager?: TaskManagerSetupContract;
+  usageCollection?: UsageCollectionSetup;
 }
 
 export interface DatasetQualityPluginStartDependencies {
