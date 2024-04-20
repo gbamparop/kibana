@@ -1,6 +1,7 @@
 # Logs Explorer
 
 
+
 This plugin is home to the `<LogsExplorer />` component and related types. It implements several of the underlying concepts that the [Observability Logs Explorer app](../observability_solution/observability_logs_explorer) builds upon.
 
 ## Developing the `<LogsExplorer />` component
