@@ -1,4 +1,4 @@
-# Data Set Quality
+# Data Set Quality - Test
 
 In order to make ongoing maintenance of log collection easy we want to introduce the concept of data set quality, where users can easily get an overview on the data sets they have with information such as integration, size, last activity, among others.
 
